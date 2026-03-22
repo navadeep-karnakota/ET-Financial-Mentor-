@@ -1,0 +1,1855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ET Money Mentor — Complete AI Finance Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #060a08;
+  --surface: #0c1210;
+  --card: #111a15;
+  --card2: #162019;
+  --border: rgba(74,222,128,0.1);
+  --border-bright: rgba(74,222,128,0.25);
+  --green: #4ade80;
+  --green-dim: #22c55e;
+  --green-glow: rgba(74,222,128,0.08);
+  --green-glow2: rgba(74,222,128,0.15);
+  --gold: #fbbf24;
+  --gold-dim: rgba(251,191,36,0.1);
+  --blue: #60a5fa;
+  --blue-dim: rgba(96,165,250,0.1);
+  --rose: #fb7185;
+  --rose-dim: rgba(251,113,133,0.1);
+  --amber: #f59e0b;
+  --text: #e2ede6;
+  --text2: #9ab8a5;
+  --muted: #5a7a65;
+  --radius: 14px;
+  --nav-w: 72px;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+@font-face {
+  font-family: 'Clash Display';
+  src: url('https://fonts.cdnfonts.com/css/clash-display') format('woff2');
+}
+
+body {
+  font-family: 'Cabinet Grotesk', 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Mesh BG */
+body::before {
+  content:'';
+  position:fixed; inset:0; z-index:0;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 10%, rgba(74,222,128,0.04) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 50% at 80% 80%, rgba(96,165,250,0.03) 0%, transparent 70%);
+  pointer-events:none;
+}
+body::after {
+  content:'';
+  position:fixed; inset:0; z-index:0;
+  background-image:
+    linear-gradient(rgba(74,222,128,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(74,222,128,0.025) 1px, transparent 1px);
+  background-size:56px 56px;
+  pointer-events:none;
+}
+
+/* ═══ LAYOUT ═══ */
+.shell { display:flex; height:100vh; position:relative; z-index:1; }
+
+/* ═══ NAV RAIL ═══ */
+.nav-rail {
+  width: var(--nav-w);
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 0;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.nav-logo {
+  width:40px; height:40px;
+  background: linear-gradient(135deg, var(--green-dim), #16a34a);
+  border-radius:12px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:13px; font-weight:800; color:#000;
+  letter-spacing:-0.5px;
+  margin-bottom:16px;
+  box-shadow: 0 0 20px rgba(74,222,128,0.3);
+  flex-shrink:0;
+}
+
+.nav-item {
+  width:48px; height:48px;
+  border-radius:12px;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  cursor:pointer;
+  transition:all 0.2s;
+  border: 1px solid transparent;
+  position:relative;
+  gap:3px;
+}
+.nav-item:hover { background:var(--green-glow); border-color:var(--border-bright); }
+.nav-item.active { background:var(--green-glow2); border-color:rgba(74,222,128,0.3); }
+.nav-item .ni-icon { font-size:18px; line-height:1; }
+.nav-item .ni-label { font-size:8px; color:var(--muted); letter-spacing:0.3px; text-align:center; line-height:1; }
+.nav-item.active .ni-label { color:var(--green); }
+
+.nav-divider { width:32px; height:1px; background:var(--border); margin:6px 0; }
+
+.nav-bottom { margin-top:auto; display:flex; flex-direction:column; align-items:center; gap:8px; }
+
+.avatar-sm {
+  width:36px; height:36px; border-radius:50%;
+  background: linear-gradient(135deg, #1e3a28, #0f2018);
+  border: 2px solid var(--border-bright);
+  display:flex; align-items:center; justify-content:center;
+  font-size:11px; font-weight:700; color:var(--green);
+  cursor:pointer;
+}
+
+/* ═══ SIDEBAR ═══ */
+.sidebar {
+  width: 240px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  flex-shrink:0;
+}
+
+.sidebar-header {
+  padding: 20px 18px 14px;
+  border-bottom: 1px solid var(--border);
+}
+.sidebar-header h2 {
+  font-size:14px; font-weight:700; color:var(--text);
+  letter-spacing:-0.3px;
+}
+.sidebar-header p { font-size:11px; color:var(--muted); margin-top:2px; }
+
+.health-widget {
+  margin:14px 14px 0;
+  background: linear-gradient(135deg, rgba(74,222,128,0.06), rgba(74,222,128,0.02));
+  border: 1px solid rgba(74,222,128,0.18);
+  border-radius: 12px; padding:14px;
+}
+.hw-top { display:flex; justify-content:space-between; align-items:flex-start; }
+.hw-label { font-size:10px; color:var(--muted); letter-spacing:1.5px; text-transform:uppercase; }
+.hw-score-wrap { text-align:right; }
+.hw-score { font-size:30px; font-weight:800; color:var(--green); line-height:1; }
+.hw-max { font-size:11px; color:var(--muted); }
+.hw-ring { margin-top:10px; position:relative; }
+.hw-ring-track { width:100%; height:6px; background:rgba(255,255,255,0.05); border-radius:3px; overflow:hidden; }
+.hw-ring-fill { height:100%; background:linear-gradient(90deg,var(--green-dim),var(--green)); border-radius:3px; transition:width 1.4s cubic-bezier(.4,0,.2,1); }
+.hw-dims { display:flex; flex-wrap:wrap; gap:4px; margin-top:10px; }
+.hw-dim {
+  flex:1; min-width:calc(50% - 2px);
+  padding:5px 7px; border-radius:7px;
+  background:rgba(0,0,0,0.2); border:1px solid rgba(255,255,255,0.04);
+  font-size:9px; color:var(--muted);
+}
+.hw-dim span { display:block; font-size:11px; font-weight:700; margin-top:1px; }
+.hw-dim span.g { color:var(--green); }
+.hw-dim span.a { color:var(--gold); }
+.hw-dim span.r { color:var(--rose); }
+
+.sidebar-nav { padding:12px 10px; flex:1; overflow-y:auto; }
+.sidebar-nav::-webkit-scrollbar { width:0; }
+.module-btn {
+  display:flex; align-items:center; gap:10px;
+  padding:9px 10px; border-radius:10px;
+  cursor:pointer; transition:all 0.2s;
+  border:1px solid transparent; margin-bottom:2px;
+  width:100%;
+}
+.module-btn:hover { background:var(--green-glow); border-color:var(--border); }
+.module-btn.active { background:var(--green-glow2); border-color:rgba(74,222,128,0.25); }
+.mb-icon { font-size:16px; width:22px; text-align:center; flex-shrink:0; }
+.mb-text { flex:1; }
+.mb-title { font-size:12px; font-weight:600; color:var(--text); }
+.mb-sub { font-size:10px; color:var(--muted); margin-top:1px; }
+.module-btn.active .mb-title { color:var(--green); }
+.mb-badge {
+  font-size:9px; padding:2px 6px; border-radius:10px;
+  background:rgba(251,113,133,0.15); color:var(--rose);
+  border:1px solid rgba(251,113,133,0.2);
+}
+
+.sidebar-footer {
+  padding:12px 14px;
+  border-top:1px solid var(--border);
+}
+.mkt-row { display:flex; justify-content:space-between; align-items:center; padding:5px 0; }
+.mkt-name { font-size:11px; color:var(--muted); }
+.mkt-right { text-align:right; }
+.mkt-val { font-size:12px; font-weight:600; }
+.mkt-chg { font-size:10px; }
+.up { color:var(--green); } .dn { color:var(--rose); }
+
+/* ═══ MAIN CONTENT ═══ */
+.main-content {
+  flex:1; display:flex; flex-direction:column; overflow:hidden;
+}
+
+.topbar {
+  padding:14px 24px;
+  border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between;
+  background:rgba(6,10,8,0.7); backdrop-filter:blur(12px);
+  flex-shrink:0;
+}
+.topbar-title { font-size:16px; font-weight:700; letter-spacing:-0.3px; }
+.topbar-sub { font-size:11px; color:var(--muted); margin-top:1px; }
+.topbar-right { display:flex; gap:8px; align-items:center; }
+.pill {
+  padding:5px 12px; border-radius:20px; font-size:11px;
+  border:1px solid; display:flex; align-items:center; gap:5px;
+}
+.pill-green { border-color:rgba(74,222,128,0.3); color:var(--green); background:var(--green-glow); }
+.pill-gold { border-color:rgba(251,191,36,0.3); color:var(--gold); background:var(--gold-dim); }
+.pill-blue { border-color:rgba(96,165,250,0.3); color:var(--blue); background:var(--blue-dim); }
+.dot-pulse { width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 2s infinite; }
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+/* ═══ PANELS ═══ */
+.panel { display:none; flex:1; overflow:hidden; }
+.panel.active { display:flex; }
+
+/* ══ CHAT PANEL ══ */
+.chat-panel { flex-direction:column; }
+.messages-wrap { flex:1; overflow-y:auto; padding:20px 24px; display:flex; flex-direction:column; gap:14px; }
+.messages-wrap::-webkit-scrollbar { width:3px; }
+.messages-wrap::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
+
+.msg { display:flex; gap:10px; animation:fadeUp 0.3s ease; }
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.msg.user { align-self:flex-end; flex-direction:row-reverse; max-width:70%; }
+.msg.ai { max-width:82%; }
+.msg-av { width:30px;height:30px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700; }
+.msg-av.ai { background:linear-gradient(135deg,#1e3a28,#0f2018);border:1px solid rgba(74,222,128,0.3);color:var(--green); }
+.msg-av.user { background:#1e3028;border:1px solid var(--border);color:var(--text); }
+.msg-bub { padding:11px 15px;border-radius:13px;font-size:13.5px;line-height:1.65; }
+.msg.ai .msg-bub { background:var(--card);border:1px solid var(--border);border-top-left-radius:3px; }
+.msg.user .msg-bub { background:#1a2e22;border:1px solid rgba(74,222,128,0.15);border-top-right-radius:3px; }
+.msg-bub strong { color:var(--green); }
+.msg-bub .hi { color:var(--gold); }
+
+/* Mini cards in chat */
+.mini-card { margin-top:10px;background:var(--card2);border:1px solid var(--border);border-radius:11px;overflow:hidden; }
+.mc-head { padding:8px 12px;background:rgba(74,222,128,0.05);border-bottom:1px solid var(--border);font-size:11px;font-weight:700;color:var(--green);letter-spacing:0.8px;text-transform:uppercase; }
+.mc-row { display:flex;justify-content:space-between;align-items:center;padding:7px 12px;border-bottom:1px solid rgba(255,255,255,0.03); }
+.mc-row:last-child { border-bottom:none; }
+.mc-lbl { font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px; }
+.mc-val { font-size:12px;font-weight:600; }
+.v-g{color:var(--green)}.v-a{color:var(--gold)}.v-r{color:var(--rose)}.v-b{color:var(--blue)}
+
+.sug-row { display:flex;flex-wrap:wrap;gap:6px;margin-top:10px; }
+.sug-chip { padding:5px 12px;border-radius:16px;border:1px solid var(--border);font-size:11.5px;color:var(--muted);cursor:pointer;transition:all 0.18s; }
+.sug-chip:hover { border-color:var(--green);color:var(--green);background:var(--green-glow); }
+
+.typing-wrap { display:flex;gap:10px;align-items:flex-end; }
+.typing-dots { padding:11px 15px;background:var(--card);border:1px solid var(--border);border-radius:13px;border-top-left-radius:3px;display:flex;gap:4px; }
+.typing-dots span { width:5px;height:5px;border-radius:50%;background:var(--muted);animation:bounce 1.2s infinite; }
+.typing-dots span:nth-child(2){animation-delay:.2s}
+.typing-dots span:nth-child(3){animation-delay:.4s}
+@keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-5px)}}
+
+.chat-input-area { padding:14px 24px 18px;border-top:1px solid var(--border);background:rgba(6,10,8,0.8);backdrop-filter:blur(10px); }
+.qa-row { display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap; }
+.qa-chip { padding:4px 11px;border-radius:16px;font-size:11px;border:1px solid var(--border);color:var(--muted);cursor:pointer;background:transparent;transition:all 0.18s; }
+.qa-chip:hover { border-color:rgba(74,222,128,0.4);color:var(--green); }
+.input-row { display:flex;gap:8px;align-items:flex-end;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:9px 11px;transition:border-color 0.2s; }
+.input-row:focus-within { border-color:rgba(74,222,128,0.35); }
+#chatInput { flex:1;background:transparent;border:none;outline:none;font-family:inherit;font-size:13.5px;color:var(--text);resize:none;max-height:100px;line-height:1.5; }
+#chatInput::placeholder { color:var(--muted); }
+.icon-btn2 { width:30px;height:30px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all 0.18s; }
+.icon-btn2:hover { border-color:rgba(74,222,128,0.3);color:var(--green); }
+.send-btn { width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,var(--green-dim),var(--green));border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(74,222,128,0.25);transition:all 0.2s; }
+.send-btn:hover { box-shadow:0 6px 18px rgba(74,222,128,0.4);transform:translateY(-1px); }
+.send-btn svg { width:15px;height:15px;fill:none;stroke:#000;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round; }
+
+/* ══ FIRE PLANNER ══ */
+.fire-panel { flex-direction:column; overflow:hidden; }
+.scroll-area { flex:1;overflow-y:auto;padding:24px; }
+.scroll-area::-webkit-scrollbar{width:3px}
+.scroll-area::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+
+.section-title {
+  font-size:13px;font-weight:700;color:var(--text2);
+  letter-spacing:1.5px;text-transform:uppercase;
+  margin-bottom:14px; display:flex;align-items:center;gap:8px;
+}
+.section-title::after { content:''; flex:1;height:1px;background:var(--border); }
+
+.form-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px; }
+.form-group { display:flex;flex-direction:column;gap:5px; }
+.form-label { font-size:11px;color:var(--muted);letter-spacing:0.5px; }
+.form-input {
+  background:var(--card);border:1px solid var(--border);border-radius:9px;
+  padding:9px 12px;font-size:13px;color:var(--text);font-family:inherit;outline:none;
+  transition:border-color 0.2s;width:100%;
+}
+.form-input:focus { border-color:rgba(74,222,128,0.4); }
+.form-select { appearance:none; background:var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%235a7a65'/%3E%3C/svg%3E") no-repeat right 12px center;border:1px solid var(--border);border-radius:9px;padding:9px 30px 9px 12px;font-size:13px;color:var(--text);font-family:inherit;outline:none;width:100%;cursor:pointer;transition:border-color 0.2s; }
+.form-select:focus { border-color:rgba(74,222,128,0.4); }
+
+.fire-btn {
+  padding:11px 28px;border-radius:10px;
+  background:linear-gradient(135deg,var(--green-dim),var(--green));
+  border:none;cursor:pointer;font-size:13px;font-weight:700;
+  color:#000;font-family:inherit;
+  box-shadow:0 4px 16px rgba(74,222,128,0.25);
+  transition:all 0.2s;
+}
+.fire-btn:hover { box-shadow:0 6px 24px rgba(74,222,128,0.4);transform:translateY(-1px); }
+.fire-btn:disabled { opacity:0.5;cursor:not-allowed;transform:none; }
+
+.results-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0; }
+.result-card {
+  background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;
+  transition:border-color 0.2s;
+}
+.result-card:hover { border-color:var(--border-bright); }
+.rc-label { font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px; }
+.rc-val { font-size:22px;font-weight:800;line-height:1; }
+.rc-sub { font-size:11px;color:var(--muted);margin-top:4px; }
+.rc-g { color:var(--green); } .rc-a { color:var(--gold); } .rc-b { color:var(--blue); } .rc-r { color:var(--rose); }
+
+.roadmap-timeline { margin-top:8px; }
+.timeline-item {
+  display:flex;gap:14px;padding:12px 0;
+  border-bottom:1px solid rgba(255,255,255,0.03);
+  position:relative;
+}
+.timeline-item:last-child { border-bottom:none; }
+.tl-dot-wrap { display:flex;flex-direction:column;align-items:center;width:20px;flex-shrink:0; }
+.tl-dot { width:12px;height:12px;border-radius:50%;flex-shrink:0;border:2px solid; }
+.tl-line { width:1px;flex:1;background:var(--border);margin-top:4px; }
+.tl-content { flex:1;padding-bottom:4px; }
+.tl-period { font-size:11px;font-weight:700;letter-spacing:0.5px;margin-bottom:4px; }
+.tl-actions { display:flex;flex-direction:column;gap:3px; }
+.tl-action { font-size:12px;color:var(--text2);display:flex;gap:6px;align-items:flex-start; }
+.tl-action::before { content:'›';color:var(--muted);flex-shrink:0; }
+.tl-action strong { color:var(--text); }
+
+/* ══ HEALTH SCORE ══ */
+.health-panel { flex-direction:column;overflow:hidden; }
+.onboard-wrap { flex:1;display:flex;align-items:center;justify-content:center; padding:24px; overflow-y:auto; }
+.onboard-card {
+  background:var(--card);border:1px solid var(--border);
+  border-radius:18px;padding:32px;max-width:680px;width:100%;
+}
+.step-indicator { display:flex;gap:8px;margin-bottom:28px; }
+.step-dot { flex:1;height:3px;border-radius:2px;background:var(--border);transition:background 0.3s; }
+.step-dot.done { background:var(--green); }
+.step-dot.active { background:var(--green-dim); }
+
+.onboard-title { font-size:22px;font-weight:800;letter-spacing:-0.5px;margin-bottom:6px; }
+.onboard-sub { font-size:14px;color:var(--text2);margin-bottom:24px;line-height:1.5; }
+
+.q-grid { display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px; }
+.q-option {
+  padding:14px;border-radius:11px;border:1.5px solid var(--border);
+  cursor:pointer;transition:all 0.2s;
+}
+.q-option:hover { border-color:rgba(74,222,128,0.35);background:var(--green-glow); }
+.q-option.selected { border-color:var(--green);background:var(--green-glow2); }
+.q-opt-title { font-size:13px;font-weight:600; }
+.q-opt-sub { font-size:11px;color:var(--muted);margin-top:3px; }
+
+.score-reveal {
+  text-align:center;padding:20px 0;
+}
+.score-circle-wrap { position:relative;display:inline-flex;align-items:center;justify-content:center;margin-bottom:20px; }
+.score-circle-svg { transform:rotate(-90deg); }
+.score-num { position:absolute;text-align:center; }
+.score-num-val { font-size:36px;font-weight:800;color:var(--green); }
+.score-num-lbl { font-size:11px;color:var(--muted); }
+.dim-scores { display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:20px; }
+.dim-card {
+  background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center;
+}
+.dim-name { font-size:10px;color:var(--muted);letter-spacing:0.8px;text-transform:uppercase;margin-bottom:6px; }
+.dim-val { font-size:20px;font-weight:800; }
+.dim-bar { height:3px;background:rgba(255,255,255,0.05);border-radius:2px;overflow:hidden;margin-top:6px; }
+.dim-fill { height:100%;border-radius:2px;transition:width 1.5s ease; }
+
+.nav-btns { display:flex;justify-content:space-between;align-items:center;margin-top:20px; }
+.btn-secondary { padding:9px 20px;border-radius:9px;border:1px solid var(--border);background:transparent;color:var(--text2);font-family:inherit;font-size:13px;cursor:pointer;transition:all 0.2s; }
+.btn-secondary:hover { border-color:var(--border-bright);color:var(--text); }
+.btn-primary { padding:9px 24px;border-radius:9px;background:var(--green);border:none;color:#000;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 14px rgba(74,222,128,0.2); }
+.btn-primary:hover { box-shadow:0 6px 20px rgba(74,222,128,0.35);transform:translateY(-1px); }
+
+/* ══ LIFE EVENTS ══ */
+.life-panel { flex-direction:column; overflow:hidden; }
+.life-grid-wrap { flex:1;overflow-y:auto;padding:24px; }
+.life-grid-wrap::-webkit-scrollbar{width:3px}
+.life-grid-wrap::-webkit-scrollbar-thumb{background:var(--border)}
+
+.life-events-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px; }
+.event-card {
+  background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:18px;
+  cursor:pointer;transition:all 0.22s;
+}
+.event-card:hover { transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.3); }
+.event-card.selected { border-color:var(--green);background:var(--green-glow); }
+.ev-emoji { font-size:28px;margin-bottom:10px; }
+.ev-title { font-size:14px;font-weight:700;margin-bottom:4px; }
+.ev-sub { font-size:11px;color:var(--muted);line-height:1.4; }
+.ev-tag { margin-top:8px;display:inline-block;padding:2px 8px;border-radius:8px;font-size:10px;font-weight:600;letter-spacing:0.5px; }
+.tag-g{background:rgba(74,222,128,0.12);color:var(--green)}
+.tag-a{background:rgba(251,191,36,0.12);color:var(--gold)}
+.tag-b{background:rgba(96,165,250,0.12);color:var(--blue)}
+.tag-r{background:rgba(251,113,133,0.12);color:var(--rose)}
+
+.event-detail-pane {
+  background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;
+}
+.ai-analysis-output {
+  background:var(--card2);border:1px solid var(--border);border-radius:11px;padding:16px;
+  font-size:13px;line-height:1.7;color:var(--text2);min-height:120px;
+}
+.ai-analysis-output strong { color:var(--text); }
+.ai-analysis-output .hi { color:var(--gold); }
+
+/* ══ TAX WIZARD ══ */
+.tax-panel { flex-direction:column; overflow:hidden; }
+.tax-wrap { flex:1;overflow-y:auto;padding:24px; }
+.tax-wrap::-webkit-scrollbar{width:3px}
+
+.tax-grid { display:grid;grid-template-columns:1fr 1fr;gap:16px; }
+.tax-card { background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px; }
+.tax-card-title { font-size:13px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px; }
+
+.regime-compare { display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px; }
+.regime-box {
+  background:var(--card2);border:1.5px solid var(--border);border-radius:10px;padding:14px;text-align:center;transition:border-color 0.2s;
+}
+.regime-box.winner { border-color:var(--green);background:var(--green-glow); }
+.regime-label { font-size:11px;color:var(--muted);letter-spacing:0.8px;text-transform:uppercase;margin-bottom:6px; }
+.regime-tax { font-size:24px;font-weight:800; }
+.regime-save { font-size:11px;margin-top:4px; }
+.regime-badge { margin-top:6px;padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700;display:inline-block; }
+.rb-g{background:rgba(74,222,128,0.15);color:var(--green)}
+
+.deduction-list { display:flex;flex-direction:column;gap:6px; }
+.deduction-item {
+  display:flex;justify-content:space-between;align-items:center;
+  padding:9px 12px;background:var(--card2);border-radius:8px;
+  border:1px solid var(--border);
+}
+.di-left { display:flex;align-items:center;gap:8px; }
+.di-icon { font-size:14px; }
+.di-name { font-size:12px;font-weight:500; }
+.di-status { font-size:10px;color:var(--muted);margin-top:1px; }
+.di-right { text-align:right; }
+.di-amount { font-size:13px;font-weight:700; }
+.di-missed { font-size:10px;color:var(--rose); }
+.di-claimed { font-size:10px;color:var(--green); }
+
+.upload-zone {
+  border:2px dashed var(--border);border-radius:12px;padding:28px;text-align:center;
+  cursor:pointer;transition:all 0.2s;margin-bottom:16px;
+}
+.upload-zone:hover { border-color:rgba(74,222,128,0.4);background:var(--green-glow); }
+.uz-icon { font-size:32px;margin-bottom:8px; }
+.uz-title { font-size:14px;font-weight:600;margin-bottom:4px; }
+.uz-sub { font-size:12px;color:var(--muted); }
+
+/* ══ COUPLE PLANNER ══ */
+.couple-panel { flex-direction:column; overflow:hidden; }
+.couple-wrap { flex:1;overflow-y:auto;padding:24px; }
+.couple-wrap::-webkit-scrollbar{width:3px}
+
+.couple-grid { display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px; }
+.partner-card {
+  background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;
+}
+.partner-header { display:flex;align-items:center;gap:10px;margin-bottom:16px; }
+.partner-av { width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700; }
+.pav-1 { background:rgba(74,222,128,0.15);color:var(--green);border:1.5px solid rgba(74,222,128,0.3); }
+.pav-2 { background:rgba(251,191,36,0.15);color:var(--gold);border:1.5px solid rgba(251,191,36,0.3); }
+.partner-name { font-size:14px;font-weight:700; }
+.partner-role { font-size:11px;color:var(--muted); }
+
+.combined-panel {
+  background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:16px;
+}
+.combined-header { display:flex;justify-content:space-between;align-items:center;margin-bottom:14px; }
+.combined-title { font-size:14px;font-weight:700; }
+.combined-nw { font-size:20px;font-weight:800;color:var(--green); }
+
+.split-recommend { display:grid;grid-template-columns:repeat(4,1fr);gap:10px; }
+.split-item { background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center; }
+.si-label { font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px; }
+.si-p1 { font-size:13px;font-weight:700;color:var(--green); }
+.si-p2 { font-size:13px;font-weight:700;color:var(--gold); }
+.si-sep { font-size:10px;color:var(--muted);margin:2px 0; }
+
+/* ══ MF X-RAY ══ */
+.mf-panel { flex-direction:column; overflow:hidden; }
+.mf-wrap { flex:1;overflow-y:auto;padding:24px; }
+.mf-wrap::-webkit-scrollbar{width:3px}
+
+.xray-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px; }
+.xray-card { background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px; }
+.xc-label { font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px; }
+.xc-val { font-size:20px;font-weight:800; }
+.xc-sub { font-size:11px;color:var(--muted);margin-top:3px; }
+
+.holdings-table { width:100%;border-collapse:collapse; }
+.holdings-table th { font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;padding:8px 12px;text-align:left;border-bottom:1px solid var(--border); }
+.holdings-table td { font-size:12px;padding:9px 12px;border-bottom:1px solid rgba(255,255,255,0.03);color:var(--text2); }
+.holdings-table td:first-child { color:var(--text);font-weight:500; }
+.holdings-table tr:last-child td { border-bottom:none; }
+.holdings-table tr:hover td { background:rgba(74,222,128,0.02); }
+
+.overlap-matrix { display:grid;grid-template-columns:repeat(4,1fr);gap:8px; }
+.om-cell { background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center;font-size:11px; }
+.om-pct { font-size:16px;font-weight:800;margin-bottom:2px; }
+.om-lbl { color:var(--muted); }
+
+.rebal-item {
+  display:flex;align-items:center;gap:12px;padding:10px 14px;
+  background:var(--card2);border:1px solid var(--border);border-radius:9px;margin-bottom:6px;
+}
+.ri-fund { flex:1;font-size:12px;font-weight:600; }
+.ri-action { font-size:11px;padding:3px 10px;border-radius:6px;font-weight:600; }
+.ra-sell{background:rgba(251,113,133,0.15);color:var(--rose)}
+.ra-buy{background:rgba(74,222,128,0.15);color:var(--green)}
+.ra-hold{background:rgba(251,191,36,0.12);color:var(--gold)}
+.ri-reason { font-size:11px;color:var(--muted);flex:2; }
+
+/* Tabs */
+.tabs { display:flex;gap:4px;padding:0 24px;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0; }
+.tab { padding:12px 16px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap; }
+.tab:hover { color:var(--text); }
+.tab.active { color:var(--green);border-bottom-color:var(--green); }
+
+/* Loading spinner */
+.spinner { display:inline-block;width:16px;height:16px;border:2px solid rgba(74,222,128,0.2);border-top-color:var(--green);border-radius:50%;animation:spin 0.8s linear infinite; }
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Responsive */
+@media(max-width:1100px) { .results-grid{grid-template-columns:repeat(2,1fr)} .xray-grid{grid-template-columns:repeat(2,1fr)} }
+@media(max-width:900px) { .sidebar{display:none} }
+@media(max-width:680px) {
+  .form-grid{grid-template-columns:1fr 1fr}
+  .life-events-grid{grid-template-columns:1fr 1fr}
+  .couple-grid{grid-template-columns:1fr}
+  .tax-grid{grid-template-columns:1fr}
+  .dim-scores{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ══ NAV RAIL ══ -->
+  <nav class="nav-rail">
+    <div class="nav-logo">ET</div>
+    <div class="nav-item active" onclick="switchPanel('chat',this)" title="AI Mentor">
+      <div class="ni-icon">💬</div>
+      <div class="ni-label">Mentor</div>
+    </div>
+    <div class="nav-item" onclick="switchPanel('fire',this)" title="FIRE Planner">
+      <div class="ni-icon">🔥</div>
+      <div class="ni-label">FIRE</div>
+    </div>
+    <div class="nav-item" onclick="switchPanel('health',this)" title="Health Score">
+      <div class="ni-icon">🩺</div>
+      <div class="ni-label">Score</div>
+    </div>
+    <div class="nav-item" onclick="switchPanel('life',this)" title="Life Events">
+      <div class="ni-icon">🎯</div>
+      <div class="ni-label">Events</div>
+    </div>
+    <div class="nav-divider"></div>
+    <div class="nav-item" onclick="switchPanel('tax',this)" title="Tax Wizard">
+      <div class="ni-icon">🧾</div>
+      <div class="ni-label">Tax</div>
+    </div>
+    <div class="nav-item" onclick="switchPanel('couple',this)" title="Couple Planner">
+      <div class="ni-icon">💑</div>
+      <div class="ni-label">Couple</div>
+    </div>
+    <div class="nav-item" onclick="switchPanel('mf',this)" title="MF X-Ray">
+      <div class="ni-icon">🔬</div>
+      <div class="ni-label">X-Ray</div>
+    </div>
+    <div class="nav-bottom">
+      <div class="avatar-sm" title="Profile">RK</div>
+    </div>
+  </nav>
+
+  <!-- ══ SIDEBAR ══ -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h2>ET Money Mentor</h2>
+      <p>Your free AI financial advisor</p>
+    </div>
+
+    <div class="health-widget">
+      <div class="hw-top">
+        <div>
+          <div class="hw-label">Money Health</div>
+        </div>
+        <div class="hw-score-wrap">
+          <div class="hw-score">62</div>
+          <div class="hw-max">/100</div>
+        </div>
+      </div>
+      <div class="hw-ring">
+        <div class="hw-ring-track"><div class="hw-ring-fill" style="width:0%" id="sidebarScoreFill"></div></div>
+      </div>
+      <div class="hw-dims">
+        <div class="hw-dim">Emergency<span class="a">42%</span></div>
+        <div class="hw-dim">Insurance<span class="r">18%</span></div>
+        <div class="hw-dim">Investments<span class="g">78%</span></div>
+        <div class="hw-dim">Tax Eff.<span class="a">55%</span></div>
+        <div class="hw-dim">Debt<span class="g">88%</span></div>
+        <div class="hw-dim">Retirement<span class="a">48%</span></div>
+      </div>
+    </div>
+
+    <div class="sidebar-nav">
+      <div class="module-btn active" onclick="switchPanel('chat',null);markActive(this)">
+        <span class="mb-icon">💬</span>
+        <div class="mb-text"><div class="mb-title">AI Chat Mentor</div><div class="mb-sub">Ask anything</div></div>
+      </div>
+      <div class="module-btn" onclick="switchPanel('fire',null);markActive(this)">
+        <span class="mb-icon">🔥</span>
+        <div class="mb-text"><div class="mb-title">FIRE Path Planner</div><div class="mb-sub">Month-by-month roadmap</div></div>
+      </div>
+      <div class="module-btn" onclick="switchPanel('health',null);markActive(this)">
+        <span class="mb-icon">🩺</span>
+        <div class="mb-text"><div class="mb-title">Money Health Score</div><div class="mb-sub">6-dimension wellness</div></div>
+        <span class="mb-badge">New</span>
+      </div>
+      <div class="module-btn" onclick="switchPanel('life',null);markActive(this)">
+        <span class="mb-icon">🎯</span>
+        <div class="mb-text"><div class="mb-title">Life Event Advisor</div><div class="mb-sub">Bonus, marriage, baby…</div></div>
+      </div>
+      <div class="module-btn" onclick="switchPanel('tax',null);markActive(this)">
+        <span class="mb-icon">🧾</span>
+        <div class="mb-text"><div class="mb-title">Tax Wizard</div><div class="mb-sub">Form 16 · Deductions</div></div>
+      </div>
+      <div class="module-btn" onclick="switchPanel('couple',null);markActive(this)">
+        <span class="mb-icon">💑</span>
+        <div class="mb-text"><div class="mb-title">Couple's Planner</div><div class="mb-sub">Joint finance optimizer</div></div>
+      </div>
+      <div class="module-btn" onclick="switchPanel('mf',null);markActive(this)">
+        <span class="mb-icon">🔬</span>
+        <div class="mb-text"><div class="mb-title">MF Portfolio X-Ray</div><div class="mb-sub">CAMS · XIRR · Overlap</div></div>
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="mkt-row"><span class="mkt-name">Sensex</span><div class="mkt-right"><div class="mkt-val">73,420</div><div class="mkt-chg up">+0.34%</div></div></div>
+      <div class="mkt-row"><span class="mkt-name">Nifty 50</span><div class="mkt-right"><div class="mkt-val">22,217</div><div class="mkt-chg up">+0.28%</div></div></div>
+      <div class="mkt-row"><span class="mkt-name">Gold /10g</span><div class="mkt-right"><div class="mkt-val">₹71,820</div><div class="mkt-chg dn">-0.12%</div></div></div>
+      <div class="mkt-row"><span class="mkt-name">USD/INR</span><div class="mkt-right"><div class="mkt-val">83.94</div><div class="mkt-chg" style="color:var(--muted)">+0.02%</div></div></div>
+    </div>
+  </aside>
+
+  <!-- ══ MAIN ══ -->
+  <div class="main-content">
+
+    <!-- TOPBAR -->
+    <div class="topbar" id="topbar">
+      <div>
+        <div class="topbar-title" id="topbarTitle">💬 AI Chat Mentor</div>
+        <div class="topbar-sub" id="topbarSub">Ask me anything about investing, taxes, insurance, or financial planning</div>
+      </div>
+      <div class="topbar-right">
+        <div class="pill pill-green"><div class="dot-pulse"></div> AI Live</div>
+        <div class="pill pill-gold">🏆 SEBI Aware</div>
+        <div class="pill pill-blue">🇮🇳 India-First</div>
+      </div>
+    </div>
+
+    <!-- ══════ PANEL: CHAT ══════ -->
+    <div class="panel chat-panel active" id="panel-chat">
+      <div class="messages-wrap" id="messages">
+
+        <div class="msg ai">
+          <div class="msg-av ai">AI</div>
+          <div class="msg-bub">
+            Namaste! 🙏 I'm your <strong>ET Money AI Mentor</strong> — India's smartest financial advisor, free for everyone. Bilkul sahi jagah aaye aap!<br><br>
+            I've analyzed your financial profile. Here's what needs immediate attention:
+            <div class="mini-card">
+              <div class="mc-head">⚡ Priority Actions</div>
+              <div class="mc-row"><span class="mc-lbl">🛡 Term Insurance</span><span class="mc-val v-r">❌ Critical Gap — ₹0 cover</span></div>
+              <div class="mc-row"><span class="mc-lbl">🚨 Emergency Fund</span><span class="mc-val v-a">⚠ ₹1.5L of ₹3.6L needed</span></div>
+              <div class="mc-row"><span class="mc-lbl">🧾 Tax Saving 80C</span><span class="mc-val v-a">₹46,800 benefits unused</span></div>
+              <div class="mc-row"><span class="mc-lbl">📈 SIP Health</span><span class="mc-val v-g">✅ 14.2% XIRR — Excellent!</span></div>
+            </div>
+            Use the tools on the left to get your <strong>FIRE Plan</strong>, <strong>Health Score</strong>, <strong>Tax Analysis</strong> and more. Or just ask me anything! 💬
+            <div class="sug-row">
+              <div class="sug-chip" onclick="sendSug('Build my complete FIRE plan for retiring at 45')">🔥 My FIRE Plan</div>
+              <div class="sug-chip" onclick="sendSug('How much term insurance do I need?')">🛡 Term Insurance</div>
+              <div class="sug-chip" onclick="sendSug('Should I choose old or new tax regime?')">🧾 Tax Regime</div>
+              <div class="sug-chip" onclick="sendSug('Best SIP funds for 2025 in India')">📊 Best SIPs</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="chat-input-area">
+        <div class="qa-row">
+          <button class="qa-chip" onclick="sendSug('Explain SIP in simple terms with examples')">📚 SIP Basics</button>
+          <button class="qa-chip" onclick="sendSug('How to save tax under 80C in India?')">💰 80C Tips</button>
+          <button class="qa-chip" onclick="sendSug('Should I prepay home loan or invest in SIP?')">🏠 Loan vs SIP</button>
+          <button class="qa-chip" onclick="sendSug('What is NPS and should I invest in it?')">🏦 NPS Guide</button>
+          <button class="qa-chip" onclick="sendSug('Review my asset allocation for my age')">📊 Asset Mix</button>
+        </div>
+        <div class="input-row">
+          <textarea id="chatInput" rows="1" placeholder="Ask me about SIP, tax, insurance, FIRE, crypto, real estate… anything!" oninput="autoResize(this)" onkeydown="handleKey(event)"></textarea>
+          <div style="display:flex;gap:6px;align-items:center">
+            <button class="icon-btn2" title="Voice">🎙</button>
+            <button class="icon-btn2" title="Upload">📎</button>
+            <button class="send-btn" onclick="sendMessage()">
+              <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════ PANEL: FIRE ══════ -->
+    <div class="panel fire-panel" id="panel-fire">
+      <div class="scroll-area">
+        <div class="section-title">🔥 Your Financial Independence Details</div>
+        <div class="form-grid">
+          <div class="form-group"><label class="form-label">Current Age</label><input class="form-input" id="f-age" type="number" value="29" placeholder="29"></div>
+          <div class="form-group"><label class="form-label">Target FIRE Age</label><input class="form-input" id="f-fire-age" type="number" value="45" placeholder="45"></div>
+          <div class="form-group"><label class="form-label">Monthly Income (₹)</label><input class="form-input" id="f-income" type="number" value="72000" placeholder="72000"></div>
+          <div class="form-group"><label class="form-label">Monthly Expenses (₹)</label><input class="form-input" id="f-expenses" type="number" value="42000" placeholder="42000"></div>
+          <div class="form-group"><label class="form-label">Existing Corpus (₹)</label><input class="form-input" id="f-corpus" type="number" value="480000" placeholder="480000"></div>
+          <div class="form-group"><label class="form-label">Current Monthly SIP (₹)</label><input class="form-input" id="f-sip" type="number" value="8000" placeholder="8000"></div>
+          <div class="form-group"><label class="form-label">Life Goals</label><select class="form-select" id="f-goals"><option>Home + FIRE</option><option>FIRE Only</option><option>Home + Kids + FIRE</option><option>Business + FIRE</option></select></div>
+          <div class="form-group"><label class="form-label">Risk Profile</label><select class="form-select" id="f-risk"><option>Moderate</option><option>Conservative</option><option>Aggressive</option></select></div>
+          <div class="form-group"><label class="form-label">Expected Salary Growth %/yr</label><input class="form-input" id="f-growth" type="number" value="10" placeholder="10"></div>
+        </div>
+        <button class="fire-btn" id="fireBtn" onclick="generateFIREPlan()">🔥 Generate My FIRE Roadmap</button>
+
+        <div id="fireResults" style="display:none">
+          <div class="results-grid" id="fireMetrics"></div>
+          <div class="section-title" style="margin-top:8px">📅 Month-by-Month Roadmap</div>
+          <div class="roadmap-timeline" id="roadmapTimeline"></div>
+          <div style="margin-top:16px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;" id="fireAIAnalysis">
+            <div class="section-title" style="margin-bottom:12px;font-size:12px">🤖 AI Deep Analysis</div>
+            <div class="ai-analysis-output" id="fireAIText">Generating your personalized analysis…</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════ PANEL: HEALTH SCORE ══════ -->
+    <div class="panel health-panel" id="panel-health">
+      <div class="onboard-wrap">
+        <div class="onboard-card" id="onboardCard">
+          <div class="step-indicator" id="stepIndicator"></div>
+          <div id="onboardContent"></div>
+          <div class="nav-btns">
+            <button class="btn-secondary" id="backBtn" onclick="prevStep()">← Back</button>
+            <button class="btn-primary" id="nextBtn" onclick="nextStep()">Next →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════ PANEL: LIFE EVENTS ══════ -->
+    <div class="panel life-panel" id="panel-life">
+      <div class="life-grid-wrap">
+        <div class="section-title">🎯 Select Your Life Event</div>
+        <div class="life-events-grid">
+          <div class="event-card" onclick="selectEvent(this,'bonus')">
+            <div class="ev-emoji">💰</div>
+            <div class="ev-title">Year-End Bonus</div>
+            <div class="ev-sub">Deploy lump-sum wisely across goals, tax, and investments</div>
+            <span class="ev-tag tag-g">High Impact</span>
+          </div>
+          <div class="event-card" onclick="selectEvent(this,'marriage')">
+            <div class="ev-emoji">💍</div>
+            <div class="ev-title">Getting Married</div>
+            <div class="ev-sub">Merge finances, joint insurance, HRA optimization, combined goals</div>
+            <span class="ev-tag tag-b">Life Changer</span>
+          </div>
+          <div class="event-card" onclick="selectEvent(this,'baby')">
+            <div class="ev-emoji">👶</div>
+            <div class="ev-title">New Baby</div>
+            <div class="ev-sub">Education corpus, enhanced insurance, SIP restructuring for new costs</div>
+            <span class="ev-tag tag-a">Planning Critical</span>
+          </div>
+          <div class="event-card" onclick="selectEvent(this,'inheritance')">
+            <div class="ev-emoji">🏛</div>
+            <div class="ev-title">Inheritance / Windfall</div>
+            <div class="ev-sub">Tax implications, optimal deployment across debt, equity, real estate</div>
+            <span class="ev-tag tag-g">Wealth Event</span>
+          </div>
+          <div class="event-card" onclick="selectEvent(this,'job_change')">
+            <div class="ev-emoji">💼</div>
+            <div class="ev-title">Job Change / Hike</div>
+            <div class="ev-sub">Salary restructuring, EPF transfer, increment deployment strategy</div>
+            <span class="ev-tag tag-b">Optimize Now</span>
+          </div>
+          <div class="event-card" onclick="selectEvent(this,'home_buy')">
+            <div class="ev-emoji">🏠</div>
+            <div class="ev-title">Buying a Home</div>
+            <div class="ev-sub">Down payment, EMI vs SIP analysis, home loan tax benefits, prepayment</div>
+            <span class="ev-tag tag-a">Big Decision</span>
+          </div>
+        </div>
+
+        <div class="event-detail-pane" id="eventDetailPane" style="display:none">
+          <div class="section-title" id="eventDetailTitle" style="margin-bottom:14px">Event Details</div>
+          <div class="form-grid" id="eventForm" style="margin-bottom:16px"></div>
+          <button class="fire-btn" onclick="analyzeEvent()">🤖 Get AI Financial Advice</button>
+          <div style="margin-top:16px;display:none" id="eventResultWrap">
+            <div class="ai-analysis-output" id="eventResult">Analyzing your situation…</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════ PANEL: TAX WIZARD ══════ -->
+    <div class="panel tax-panel" id="panel-tax">
+      <div class="tax-wrap">
+        <div class="tax-grid">
+          <div>
+            <div class="upload-zone" onclick="simulateUpload()">
+              <div class="uz-icon" id="uzIcon">📄</div>
+              <div class="uz-title" id="uzTitle">Upload Form 16 or Salary Slip</div>
+              <div class="uz-sub">PDF · JPG · PNG — AI extracts all details automatically</div>
+            </div>
+
+            <div class="tax-card" style="margin-bottom:14px">
+              <div class="tax-card-title">✍ Or Enter Manually</div>
+              <div class="form-grid" style="grid-template-columns:1fr 1fr">
+                <div class="form-group"><label class="form-label">Gross Salary (₹/yr)</label><input class="form-input" id="t-gross" type="number" value="864000"></div>
+                <div class="form-group"><label class="form-label">Basic Salary (₹/yr)</label><input class="form-input" id="t-basic" type="number" value="432000"></div>
+                <div class="form-group"><label class="form-label">HRA (₹/yr)</label><input class="form-input" id="t-hra" type="number" value="216000"></div>
+                <div class="form-group"><label class="form-label">Home Rent Paid (₹/yr)</label><input class="form-input" id="t-rent" type="number" value="180000"></div>
+                <div class="form-group"><label class="form-label">ELSS / PPF (₹)</label><input class="form-input" id="t-elss" type="number" value="50000"></div>
+                <div class="form-group"><label class="form-label">EPF Deducted (₹)</label><input class="form-input" id="t-epf" type="number" value="51840"></div>
+              </div>
+              <button class="fire-btn" style="margin-top:4px;padding:9px 20px;font-size:12px" onclick="analyzeTax()">🧾 Analyze My Taxes</button>
+            </div>
+          </div>
+
+          <div>
+            <div class="tax-card" style="margin-bottom:14px" id="regimeCard">
+              <div class="tax-card-title">⚖ Old vs New Regime</div>
+              <div style="color:var(--muted);font-size:13px">Enter your details and click Analyze to see comparison</div>
+              <div class="regime-compare" id="regimeCompare" style="display:none"></div>
+            </div>
+
+            <div class="tax-card">
+              <div class="tax-card-title">💡 Deductions Finder</div>
+              <div class="deduction-list" id="deductionList">
+                <div style="color:var(--muted);font-size:13px">Run analysis to see your deduction opportunities</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:16px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;display:none" id="taxAIWrap">
+          <div class="section-title" style="font-size:12px;margin-bottom:12px">🤖 AI Tax Strategy</div>
+          <div class="ai-analysis-output" id="taxAIText"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════ PANEL: COUPLE PLANNER ══════ -->
+    <div class="panel couple-panel" id="panel-couple">
+      <div class="couple-wrap">
+        <div class="couple-grid">
+          <div class="partner-card">
+            <div class="partner-header">
+              <div class="partner-av pav-1">P1</div>
+              <div><div class="partner-name">Partner 1</div><div class="partner-role">Primary earner</div></div>
+            </div>
+            <div class="form-grid" style="grid-template-columns:1fr 1fr">
+              <div class="form-group"><label class="form-label">Name</label><input class="form-input" id="c-p1-name" value="Priya" placeholder="Name"></div>
+              <div class="form-group"><label class="form-label">Age</label><input class="form-input" id="c-p1-age" type="number" value="30"></div>
+              <div class="form-group"><label class="form-label">Monthly Income</label><input class="form-input" id="c-p1-income" type="number" value="95000"></div>
+              <div class="form-group"><label class="form-label">Monthly Expenses</label><input class="form-input" id="c-p1-exp" type="number" value="35000"></div>
+              <div class="form-group"><label class="form-label">Existing Savings</label><input class="form-input" id="c-p1-savings" type="number" value="850000"></div>
+              <div class="form-group"><label class="form-label">Risk Profile</label><select class="form-select" id="c-p1-risk"><option>Moderate</option><option>Aggressive</option><option>Conservative</option></select></div>
+            </div>
+          </div>
+          <div class="partner-card">
+            <div class="partner-header">
+              <div class="partner-av pav-2">P2</div>
+              <div><div class="partner-name">Partner 2</div><div class="partner-role">Co-earner</div></div>
+            </div>
+            <div class="form-grid" style="grid-template-columns:1fr 1fr">
+              <div class="form-group"><label class="form-label">Name</label><input class="form-input" id="c-p2-name" value="Rahul" placeholder="Name"></div>
+              <div class="form-group"><label class="form-label">Age</label><input class="form-input" id="c-p2-age" type="number" value="32"></div>
+              <div class="form-group"><label class="form-label">Monthly Income</label><input class="form-input" id="c-p2-income" type="number" value="72000"></div>
+              <div class="form-group"><label class="form-label">Monthly Expenses</label><input class="form-input" id="c-p2-exp" type="number" value="28000"></div>
+              <div class="form-group"><label class="form-label">Existing Savings</label><input class="form-input" id="c-p2-savings" type="number" value="480000"></div>
+              <div class="form-group"><label class="form-label">Risk Profile</label><select class="form-select" id="c-p2-risk"><option>Aggressive</option><option>Moderate</option><option>Conservative</option></select></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="text-align:center;margin-bottom:20px">
+          <button class="fire-btn" onclick="analyzeCouple()">💑 Optimize Our Finances Together</button>
+        </div>
+
+        <div id="coupleResults" style="display:none">
+          <div class="combined-panel">
+            <div class="combined-header">
+              <div class="combined-title">💰 Combined Financial Picture</div>
+              <div class="combined-nw" id="combinedNW">₹13.3 Lakhs</div>
+            </div>
+            <div class="split-recommend" id="splitRecommend"></div>
+          </div>
+
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px">
+            <div class="section-title" style="font-size:12px;margin-bottom:12px">🤖 AI Couple Strategy</div>
+            <div class="ai-analysis-output" id="coupleAIText">Analyzing joint financial strategy…</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════ PANEL: MF X-RAY ══════ -->
+    <div class="panel mf-panel" id="panel-mf">
+      <div class="tabs" id="mfTabs">
+        <div class="tab active" onclick="switchMfTab('upload',this)">📤 Upload Statement</div>
+        <div class="tab" onclick="switchMfTab('portfolio',this)">📊 Portfolio Overview</div>
+        <div class="tab" onclick="switchMfTab('overlap',this)">🔄 Overlap Analysis</div>
+        <div class="tab" onclick="switchMfTab('rebalance',this)">⚖ Rebalancing Plan</div>
+      </div>
+
+      <div class="mf-wrap" id="mfWrap">
+
+        <!-- Upload Tab -->
+        <div id="mfTab-upload">
+          <div class="upload-zone" onclick="simulateMFUpload()">
+            <div class="uz-icon" id="mfUpIcon">📑</div>
+            <div class="uz-title" id="mfUpTitle">Upload CAMS / KFintech Statement</div>
+            <div class="uz-sub">Your consolidated MF statement · PDF · Processed securely in seconds</div>
+          </div>
+          <div style="text-align:center;color:var(--muted);font-size:13px;margin-bottom:20px">— or use sample portfolio —</div>
+          <div style="text-align:center">
+            <button class="fire-btn" onclick="loadSamplePortfolio()">📊 Load Sample Portfolio & X-Ray</button>
+          </div>
+        </div>
+
+        <!-- Portfolio Tab -->
+        <div id="mfTab-portfolio" style="display:none">
+          <div class="xray-grid" id="xrayMetrics"></div>
+          <div class="section-title">📋 Holdings Breakdown</div>
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:20px">
+            <table class="holdings-table" id="holdingsTable"></table>
+          </div>
+        </div>
+
+        <!-- Overlap Tab -->
+        <div id="mfTab-overlap" style="display:none">
+          <div class="section-title">🔄 Stock Overlap Between Funds</div>
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:16px">
+            <div class="overlap-matrix" id="overlapMatrix"></div>
+          </div>
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px">
+            <div class="section-title" style="font-size:12px;margin-bottom:12px">Top Overlapping Stocks</div>
+            <div id="overlapStocks"></div>
+          </div>
+        </div>
+
+        <!-- Rebalance Tab -->
+        <div id="mfTab-rebalance" style="display:none">
+          <div class="section-title">⚖ AI Rebalancing Recommendations</div>
+          <div id="rebalanceList"></div>
+          <div style="margin-top:16px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px">
+            <div class="section-title" style="font-size:12px;margin-bottom:12px">🤖 AI Portfolio Assessment</div>
+            <div class="ai-analysis-output" id="mfAIText">Upload your portfolio to get personalized recommendations.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /main-content -->
+</div><!-- /shell -->
+
+<script>
+// ═══════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════
+const chatMessages = [];
+let currentPanel = 'chat';
+let healthStep = 0;
+let healthAnswers = {};
+let selectedEvent = null;
+let mfLoaded = false;
+
+// ═══════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════
+const panelMeta = {
+  chat:   { title:'💬 AI Chat Mentor', sub:'Ask anything about investing, taxes, insurance, or financial planning' },
+  fire:   { title:'🔥 FIRE Path Planner', sub:'Build your complete month-by-month financial independence roadmap' },
+  health: { title:'🩺 Money Health Score', sub:'5-minute onboarding to get your comprehensive financial wellness score' },
+  life:   { title:'🎯 Life Event Advisor', sub:'Bonus, inheritance, marriage, baby — AI-guided financial decisions' },
+  tax:    { title:'🧾 Tax Wizard', sub:'Upload Form 16 · Identify missed deductions · Old vs New regime comparison' },
+  couple: { title:'💑 Couple\'s Money Planner', sub:'India\'s first AI joint finance optimizer for two incomes' },
+  mf:     { title:'🔬 MF Portfolio X-Ray', sub:'Upload CAMS statement · XIRR · Overlap · Expense Ratio · AI Rebalancing' },
+};
+
+function switchPanel(id, navEl) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  document.getElementById('topbarTitle').textContent = panelMeta[id].title;
+  document.getElementById('topbarSub').textContent = panelMeta[id].sub;
+  currentPanel = id;
+  if (navEl) {
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    navEl.classList.add('active');
+  }
+  if (id === 'health' && healthStep === 0) initHealthOnboarding();
+}
+
+function markActive(el) {
+  document.querySelectorAll('.module-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// Sidebar health score animation
+setTimeout(() => { document.getElementById('sidebarScoreFill').style.width = '62%'; }, 600);
+
+// ═══════════════════════════════════════
+// CLAUDE API
+// ═══════════════════════════════════════
+const BASE_SYSTEM = `You are ET Money AI Mentor — India's most trusted personal finance AI embedded in Economic Times. You are like a knowledgeable, warm financial advisor friend who speaks naturally in Hinglish (Hindi-English mix).
+
+USER CONTEXT: Rahul Kumar, 29yrs, Hyderabad. Income ₹72,000/mo. Expenses ₹42,000/mo. SIP ₹8,000/mo. Portfolio XIRR 14.2%. Emergency fund ₹1.5L. No term insurance. Health insurance ₹5L company cover. Wants: home in 3yrs + FIRE at 45.
+
+RULES:
+- Use ₹ for rupees. Reference Indian instruments: SIP, ELSS, PPF, NPS, EPF, FD, ULIP, HRA, 80C, 80D, 54EC
+- Be specific with numbers. Never give generic advice.
+- Use light Hinglish naturally (e.g., "Yeh bahut important hai", "Bilkul sahi")
+- End with 1-2 actionable next steps or follow-up suggestions
+- Keep under 280 words unless asked for a detailed plan
+- Bold key numbers and terms using **markdown**`;
+
+async function callClaude(userMessage, systemOverride, maxTokens=900) {
+  const sys = systemOverride || BASE_SYSTEM;
+  const response = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: maxTokens,
+      system: sys,
+      messages: [{ role: 'user', content: userMessage }]
+    })
+  });
+  const data = await response.json();
+  return data.content?.[0]?.text || 'Could not generate response. Please try again.';
+}
+
+// ═══════════════════════════════════════
+// CHAT
+// ═══════════════════════════════════════
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 100) + 'px';
+}
+function handleKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }
+
+function sendSug(text) {
+  document.getElementById('chatInput').value = text;
+  sendMessage();
+}
+
+let isChatTyping = false;
+async function sendMessage() {
+  if (isChatTyping) return;
+  const inp = document.getElementById('chatInput');
+  const text = inp.value.trim();
+  if (!text) return;
+  inp.value = ''; inp.style.height = 'auto';
+  appendMsg('user', text);
+  chatMessages.push({ role: 'user', content: text });
+  showTyping();
+  try {
+    const reply = await callClaude(text);
+    chatMessages.push({ role: 'assistant', content: reply });
+    hideTyping();
+    appendMsg('ai', reply);
+  } catch(e) {
+    hideTyping();
+    appendMsg('ai', '⚠ Network error. Please try again.');
+  }
+}
+
+function appendMsg(role, text) {
+  const wrap = document.getElementById('messages');
+  const div = document.createElement('div');
+  div.className = 'msg ' + role;
+  const av = document.createElement('div');
+  av.className = 'msg-av ' + role;
+  av.textContent = role === 'ai' ? 'AI' : 'RK';
+  const bub = document.createElement('div');
+  bub.className = 'msg-bub';
+  bub.innerHTML = fmt(text);
+  div.appendChild(av); div.appendChild(bub);
+  wrap.appendChild(div);
+  wrap.scrollTop = wrap.scrollHeight;
+}
+
+function fmt(t) {
+  return t.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\n\n/g,'<br><br>').replace(/\n/g,'<br>')
+    .replace(/₹([\d,]+)/g,'<span class="hi">₹$1</span>');
+}
+
+function showTyping() {
+  isChatTyping = true;
+  const wrap = document.getElementById('messages');
+  const d = document.createElement('div');
+  d.id = 'typing'; d.className = 'msg ai';
+  d.innerHTML = `<div class="msg-av ai">AI</div><div class="typing-dots"><span></span><span></span><span></span></div>`;
+  wrap.appendChild(d); wrap.scrollTop = wrap.scrollHeight;
+}
+function hideTyping() {
+  isChatTyping = false;
+  const el = document.getElementById('typing');
+  if (el) el.remove();
+}
+
+// ═══════════════════════════════════════
+// FIRE PLANNER
+// ═══════════════════════════════════════
+async function generateFIREPlan() {
+  const btn = document.getElementById('fireBtn');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Building your roadmap…';
+
+  const age = +document.getElementById('f-age').value;
+  const fireAge = +document.getElementById('f-fire-age').value;
+  const income = +document.getElementById('f-income').value;
+  const expenses = +document.getElementById('f-expenses').value;
+  const corpus = +document.getElementById('f-corpus').value;
+  const sip = +document.getElementById('f-sip').value;
+  const growth = +document.getElementById('f-growth').value;
+  const risk = document.getElementById('f-risk').value;
+  const goals = document.getElementById('f-goals').value;
+
+  const yrs = fireAge - age;
+  const xirr = risk === 'Aggressive' ? 0.15 : risk === 'Conservative' ? 0.10 : 0.13;
+  const annualExpenses = expenses * 12;
+  const fireNum = Math.round(annualExpenses * 25 * 1.06 ** yrs);
+  const monthlyNeeded = Math.round((fireNum - corpus * (1 + xirr) ** yrs) / (((1 + xirr/12) ** (yrs*12) - 1) / (xirr/12)));
+  const saveable = income - expenses;
+  const sipIncrease = Math.max(0, monthlyNeeded - sip);
+  const corpusAtFIRE = Math.round(corpus * (1 + xirr) ** yrs + monthlyNeeded * 12 / xirr * ((1 + xirr) ** yrs - 1));
+  const taxSavings = Math.round(Math.min(150000, income * 12 * 0.3) * 0.3);
+
+  document.getElementById('fireResults').style.display = 'block';
+  document.getElementById('fireMetrics').innerHTML = `
+    <div class="result-card"><div class="rc-label">FIRE Number</div><div class="rc-val rc-g">₹${(fireNum/100000).toFixed(1)}L</div><div class="rc-sub">Your magic corpus target</div></div>
+    <div class="result-card"><div class="rc-label">Monthly SIP Needed</div><div class="rc-val rc-a">₹${monthlyNeeded.toLocaleString()}</div><div class="rc-sub">Increase by ₹${sipIncrease.toLocaleString()}/mo</div></div>
+    <div class="result-card"><div class="rc-label">Projected Corpus</div><div class="rc-val rc-b">₹${(corpusAtFIRE/100000).toFixed(1)}L</div><div class="rc-sub">At ${(xirr*100).toFixed(0)}% XIRR in ${yrs}yrs</div></div>
+    <div class="result-card"><div class="rc-label">Annual Tax Saving</div><div class="rc-val rc-g">₹${taxSavings.toLocaleString()}</div><div class="rc-sub">Via 80C + 80CCD(1B)</div></div>
+  `;
+
+  // Generate timeline
+  const phases = [
+    {
+      period: `Now – Year 1 (Age ${age}-${age+1})`,
+      color: 'var(--rose)',
+      actions: [
+        `<strong>Buy ₹1Cr term insurance immediately</strong> — costs ≈₹800/month`,
+        `Build emergency fund to ₹${Math.round(expenses*5).toLocaleString()} (5 months) at ₹${Math.round(expenses*0.1).toLocaleString()}/mo`,
+        `Maximize 80C — ELSS SIP ₹${Math.max(0,150000-Math.round(income*12*0.12)/12).toLocaleString()}/mo + EPF`,
+        `Start NPS ₹50,000/yr for extra ₹15,000 tax benefit under 80CCD(1B)`
+      ]
+    },
+    {
+      period: `Year 1–3 (Age ${age+1}–${age+3}) — Foundation`,
+      color: 'var(--gold)',
+      actions: [
+        `Increase SIP by 10% each April (salary hike → invest hike)`,
+        `<strong>Asset mix: 80% equity / 15% debt / 5% gold</strong>`,
+        goals.includes('Home') ? `Save ₹${Math.round(income*0.2).toLocaleString()}/mo in liquid fund for house down payment` : `Boost FIRE SIP to ₹${Math.round(monthlyNeeded*0.6).toLocaleString()}/mo`,
+        `Annual review — rebalance if any asset class drifts >5%`
+      ]
+    },
+    {
+      period: `Year 3–7 (Age ${age+3}–${age+7}) — Acceleration`,
+      color: 'var(--blue)',
+      actions: [
+        `<strong>Target monthly SIP ₹${monthlyNeeded.toLocaleString()}</strong> by step-up investing`,
+        goals.includes('Home') ? `Execute home purchase — optimize EMI + prepayment vs SIP` : `Explore REITs for real estate exposure without loan`,
+        `Add international equity fund (20% of equity for diversification)`,
+        `Review term cover — increase to ${Math.round(income*12*15/100000*100)/100}x income as wealth grows`
+      ]
+    },
+    {
+      period: `Year 7–${yrs} (Age ${age+7}–${fireAge}) — Pre-FIRE`,
+      color: 'var(--green)',
+      actions: [
+        `Shift allocation to <strong>60% equity / 35% debt / 5% gold</strong> as FIRE nears`,
+        `Build a 2-year cash buffer (₹${Math.round(expenses*24).toLocaleString()}) in FD/RD for early retirement`,
+        `Explore dividend-income funds for passive cash flow`,
+        `<strong>FIRE check:</strong> Corpus target ₹${(fireNum/100000).toFixed(1)}L — review annually`
+      ]
+    }
+  ];
+
+  document.getElementById('roadmapTimeline').innerHTML = phases.map(p => `
+    <div class="timeline-item">
+      <div class="tl-dot-wrap">
+        <div class="tl-dot" style="background:${p.color};border-color:${p.color}"></div>
+        <div class="tl-line"></div>
+      </div>
+      <div class="tl-content">
+        <div class="tl-period" style="color:${p.color}">${p.period}</div>
+        <div class="tl-actions">${p.actions.map(a=>`<div class="tl-action">${a}</div>`).join('')}</div>
+      </div>
+    </div>
+  `).join('');
+
+  // AI analysis
+  const prompt = `User wants to achieve FIRE at age ${fireAge} (currently ${age}). Monthly income ₹${income}, expenses ₹${expenses}, existing corpus ₹${corpus}, current SIP ₹${sip}, salary growth ${growth}%/yr, risk profile: ${risk}, goals: ${goals}.
+
+FIRE Number calculated: ₹${(fireNum/100000).toFixed(1)}L. Monthly SIP needed: ₹${monthlyNeeded.toLocaleString()}. 
+
+Give a 200-word personalized FIRE analysis with:
+1. Assessment of whether this FIRE target is realistic
+2. The single biggest risk to their plan
+3. One contrarian insight most advisors miss
+4. Most impactful action they should take THIS MONTH
+
+Use Hinglish naturally. Be specific with ₹ numbers.`;
+
+  try {
+    const analysis = await callClaude(prompt, BASE_SYSTEM, 500);
+    document.getElementById('fireAIText').innerHTML = fmt(analysis);
+  } catch(e) {
+    document.getElementById('fireAIText').textContent = 'Could not load AI analysis. Check connection.';
+  }
+
+  btn.disabled = false; btn.textContent = '🔄 Recalculate';
+  document.getElementById('fireResults').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// ═══════════════════════════════════════
+// HEALTH SCORE
+// ═══════════════════════════════════════
+const healthQuestions = [
+  {
+    title: "Let's start with your emergency fund",
+    sub: "How many months of expenses can you cover right now?",
+    field: 'emergency',
+    options: [
+      { title: 'Less than 1 month', sub: 'High risk situation', score: 10 },
+      { title: '1–2 months', sub: 'Below recommended', score: 35 },
+      { title: '3–5 months', sub: 'On track!', score: 70 },
+      { title: '6+ months', sub: 'Excellent preparedness', score: 100 }
+    ]
+  },
+  {
+    title: "Insurance Coverage",
+    sub: "What insurance do you currently have?",
+    field: 'insurance',
+    options: [
+      { title: 'None at all', sub: 'Extremely high risk', score: 0 },
+      { title: 'Only health insurance', sub: 'Partially covered', score: 30 },
+      { title: 'Health + Term', sub: 'Well covered', score: 75 },
+      { title: 'Health + Term + Critical Illness', sub: 'Comprehensive cover', score: 100 }
+    ]
+  },
+  {
+    title: "Investment Diversification",
+    sub: "How is your money spread?",
+    field: 'diversification',
+    options: [
+      { title: 'Only FD / Savings account', sub: 'Very low diversification', score: 15 },
+      { title: 'FD + 1-2 Mutual Funds', sub: 'Basic diversification', score: 45 },
+      { title: 'MF + Stocks + Gold + FD', sub: 'Good spread', score: 80 },
+      { title: 'MF + Stocks + Gold + NPS + Real Estate', sub: 'Excellent allocation', score: 100 }
+    ]
+  },
+  {
+    title: "Debt Situation",
+    sub: "What's your current debt picture?",
+    field: 'debt',
+    options: [
+      { title: 'Multiple loans + credit cards', sub: 'High debt stress', score: 10 },
+      { title: 'One major loan (home/car)', sub: 'Manageable', score: 55 },
+      { title: 'Small personal loan only', sub: 'Low debt burden', score: 75 },
+      { title: 'Debt-free', sub: 'Perfect debt health', score: 100 }
+    ]
+  },
+  {
+    title: "Tax Efficiency",
+    sub: "Are you maximizing your 80C and other deductions?",
+    field: 'tax',
+    options: [
+      { title: 'I barely know my tax slab', sub: 'Leaving a lot of money on the table', score: 10 },
+      { title: 'Only EPF contributes to 80C', sub: 'Missing many benefits', score: 30 },
+      { title: '80C maxed out', sub: 'Good, but there\'s more', score: 65 },
+      { title: '80C + 80D + 80CCD(1B) + HRA', sub: 'Tax ninja!', score: 100 }
+    ]
+  },
+  {
+    title: "Retirement Readiness",
+    sub: "How prepared are you for retirement?",
+    field: 'retirement',
+    options: [
+      { title: 'Not thinking about it yet', sub: 'Time is your biggest asset — start now', score: 5 },
+      { title: 'Only EPF / company PF', sub: 'Below target savings rate', score: 35 },
+      { title: 'EPF + Mutual Fund SIPs', sub: 'On the right track', score: 65 },
+      { title: 'EPF + SIPs + NPS + clear target', sub: 'Well-planned retirement', score: 95 }
+    ]
+  }
+];
+
+function initHealthOnboarding() {
+  healthStep = 0;
+  healthAnswers = {};
+  renderHealthStep();
+}
+
+function renderHealthStep() {
+  const steps = healthQuestions.length;
+  const isResult = healthStep >= steps;
+
+  // Step indicator
+  document.getElementById('stepIndicator').innerHTML = Array.from({length: steps}, (_, i) =>
+    `<div class="step-dot ${i < healthStep ? 'done' : i === healthStep ? 'active' : ''}"></div>`
+  ).join('');
+
+  document.getElementById('backBtn').style.display = healthStep === 0 || isResult ? 'none' : 'inline-block';
+  document.getElementById('nextBtn').textContent = isResult ? '🔄 Retake' : healthStep === steps - 1 ? 'See My Score →' : 'Next →';
+  if (isResult) {
+    document.getElementById('nextBtn').onclick = () => { initHealthOnboarding(); };
+    renderHealthResult();
+    return;
+  }
+
+  const q = healthQuestions[healthStep];
+  document.getElementById('onboardContent').innerHTML = `
+    <div class="onboard-title">${q.title}</div>
+    <div class="onboard-sub">${q.sub}</div>
+    <div class="q-grid">
+      ${q.options.map((o, i) => `
+        <div class="q-option ${healthAnswers[q.field] === i ? 'selected' : ''}" onclick="selectHealthOption(this, '${q.field}', ${i}, ${o.score})">
+          <div class="q-opt-title">${o.title}</div>
+          <div class="q-opt-sub">${o.sub}</div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function selectHealthOption(el, field, idx, score) {
+  document.querySelectorAll('.q-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  healthAnswers[field] = idx;
+  healthAnswers[field + '_score'] = score;
+}
+
+function nextStep() {
+  const q = healthQuestions[healthStep];
+  if (healthStep < healthQuestions.length && healthAnswers[q?.field] === undefined) {
+    document.querySelectorAll('.q-option')[0]?.click();
+  }
+  healthStep++;
+  renderHealthStep();
+}
+
+function prevStep() {
+  if (healthStep > 0) { healthStep--; renderHealthStep(); }
+}
+
+function renderHealthResult() {
+  const dims = ['emergency','insurance','diversification','debt','tax','retirement'];
+  const labels = ['Emergency','Insurance','Investments','Debt Health','Tax Eff.','Retirement'];
+  const emojis = ['🚨','🛡','📊','💳','🧾','🏖'];
+  const scores = dims.map(d => healthAnswers[d + '_score'] || 50);
+  const overall = Math.round(scores.reduce((a,b)=>a+b,0) / scores.length);
+
+  const colors = (s) => s >= 70 ? 'var(--green)' : s >= 40 ? 'var(--gold)' : 'var(--rose)';
+  const fillColors = (s) => s >= 70 ? 'var(--green-dim)' : s >= 40 ? '#c9922a' : '#c0392b';
+
+  // Circle SVG
+  const r = 56, circ = 2 * Math.PI * r;
+  const dashArr = (circ * overall / 100).toFixed(1);
+
+  document.getElementById('onboardContent').innerHTML = `
+    <div class="score-reveal">
+      <div class="onboard-title">Your Money Health Score</div>
+      <div class="onboard-sub">Based on 6 dimensions of financial wellness</div>
+      <div class="score-circle-wrap">
+        <svg class="score-circle-svg" width="140" height="140" viewBox="0 0 140 140">
+          <circle cx="70" cy="70" r="${r}" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="12"/>
+          <circle cx="70" cy="70" r="${r}" fill="none" stroke="${colors(overall)}" stroke-width="12"
+            stroke-dasharray="${dashArr} ${circ.toFixed(1)}" stroke-linecap="round"
+            style="transition:stroke-dasharray 1.5s ease;filter:drop-shadow(0 0 8px ${colors(overall)}60)"/>
+        </svg>
+        <div class="score-num">
+          <div class="score-num-val" style="color:${colors(overall)}">${overall}</div>
+          <div class="score-num-lbl">/ 100</div>
+        </div>
+      </div>
+      <div class="dim-scores">
+        ${dims.map((d,i) => `
+          <div class="dim-card">
+            <div class="dim-name">${emojis[i]} ${labels[i]}</div>
+            <div class="dim-val" style="color:${colors(scores[i])}">${scores[i]}</div>
+            <div class="dim-bar"><div class="dim-fill" style="background:${fillColors(scores[i])};width:${scores[i]}%"></div></div>
+          </div>
+        `).join('')}
+      </div>
+      <div style="margin-top:16px;padding:14px;background:var(--green-glow);border:1px solid rgba(74,222,128,0.2);border-radius:10px;font-size:13px;color:var(--text2);text-align:left">
+        <strong style="color:var(--green)">🤖 AI Insight:</strong> ${getHealthInsight(overall, scores, labels)}
+      </div>
+    </div>
+  `;
+
+  // Update sidebar
+  document.getElementById('sidebarScoreFill').style.width = overall + '%';
+}
+
+function getHealthInsight(score, scores, labels) {
+  const lowest = scores.indexOf(Math.min(...scores));
+  const label = labels[lowest];
+  if (score < 40) return `Your score of ${score} shows critical gaps. Focus first on your <strong>${label}</strong> — this is your biggest financial vulnerability right now.`;
+  if (score < 65) return `You're on the right track! Your weakest area is <strong>${label} (${scores[lowest]})</strong>. Fixing this alone could push your score to ${score+15}+.`;
+  return `Excellent financial health! Your <strong>${label}</strong> score of ${scores[lowest]} is the only area holding you back from a 90+ score.`;
+}
+
+// ═══════════════════════════════════════
+// LIFE EVENTS
+// ═══════════════════════════════════════
+const eventForms = {
+  bonus: [
+    {id:'ev-bonus',label:'Bonus Amount (₹)',type:'number',val:'300000'},
+    {id:'ev-taxbracket',label:'Tax Bracket',type:'select',opts:['30%','20%','10%']},
+    {id:'ev-goals2',label:'Primary Goal',type:'select',opts:['Wealth Building','Emergency Fund','Prepay Loan','Buy Asset']},
+  ],
+  marriage: [
+    {id:'ev-partner-income',label:"Partner's Monthly Income",type:'number',val:'65000'},
+    {id:'ev-wedding-cost',label:'Wedding Budget (₹)',type:'number',val:'1500000'},
+    {id:'ev-city',label:'City (for HRA)',type:'select',opts:['Metro (Mumbai/Delhi/Bengaluru)','Non-metro']},
+  ],
+  baby: [
+    {id:'ev-baby-age',label:'Expected/Child Age',type:'select',opts:['Expecting','0-2 yrs','3-5 yrs']},
+    {id:'ev-edu-target',label:'Education Target',type:'select',opts:['IIT/IIM equivalent','Private college','Abroad university']},
+    {id:'ev-baby-corpus',label:'Current Child Corpus',type:'number',val:'0'},
+  ],
+  inheritance: [
+    {id:'ev-inherit-amt',label:'Inheritance Amount (₹)',type:'number',val:'2500000'},
+    {id:'ev-inherit-type',label:'Type',type:'select',opts:['Cash/FD','Property','Equity shares','Mix']},
+    {id:'ev-inherit-tax',label:'Tax Bracket',type:'select',opts:['30%','20%','10%']},
+  ],
+  job_change: [
+    {id:'ev-old-ctc',label:'Old CTC (₹/yr)',type:'number',val:'864000'},
+    {id:'ev-new-ctc',label:'New CTC (₹/yr)',type:'number',val:'1200000'},
+    {id:'ev-epf-bal',label:'EPF Balance to Transfer',type:'number',val:'180000'},
+  ],
+  home_buy: [
+    {id:'ev-prop-val',label:'Property Value (₹)',type:'number',val:'6500000'},
+    {id:'ev-down-pay',label:'Available Down Payment',type:'number',val:'1500000'},
+    {id:'ev-home-city',label:'City',type:'select',opts:['Mumbai','Delhi NCR','Bengaluru','Hyderabad','Chennai','Pune','Other']},
+  ],
+};
+
+const eventTitles = {
+  bonus:'💰 Bonus Deployment Strategy', marriage:'💍 Marriage Financial Planner',
+  baby:'👶 New Baby Financial Plan', inheritance:'🏛 Inheritance Optimizer',
+  job_change:'💼 Job Change Financial Impact', home_buy:'🏠 Home Buying Analysis'
+};
+
+function selectEvent(el, type) {
+  document.querySelectorAll('.event-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedEvent = type;
+  const pane = document.getElementById('eventDetailPane');
+  const form = document.getElementById('eventForm');
+  pane.style.display = 'block';
+  document.getElementById('eventDetailTitle').textContent = eventTitles[type];
+  document.getElementById('eventResultWrap').style.display = 'none';
+  form.innerHTML = (eventForms[type] || []).map(f => `
+    <div class="form-group">
+      <label class="form-label">${f.label}</label>
+      ${f.type === 'select'
+        ? `<select class="form-select" id="${f.id}">${f.opts.map(o=>`<option>${o}</option>`).join('')}</select>`
+        : `<input class="form-input" id="${f.id}" type="${f.type}" value="${f.val||''}">`
+      }
+    </div>
+  `).join('');
+  pane.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+async function analyzeEvent() {
+  if (!selectedEvent) return;
+  const resultWrap = document.getElementById('eventResultWrap');
+  const resultDiv = document.getElementById('eventResult');
+  resultWrap.style.display = 'block';
+  resultDiv.innerHTML = '<span class="spinner"></span> Analyzing your situation…';
+
+  const formData = {};
+  (eventForms[selectedEvent] || []).forEach(f => {
+    const el = document.getElementById(f.id);
+    if (el) formData[f.label] = el.value;
+  });
+
+  const prompt = `Life event: ${eventTitles[selectedEvent]}. User details: ${JSON.stringify(formData)}.
+Base user context: Rahul Kumar, 29, Hyderabad, monthly income ₹72,000, existing corpus ₹4.8L, SIP ₹8,000/mo.
+
+Provide a comprehensive, actionable financial plan for this life event covering:
+1. Immediate actions (within 30 days)
+2. Tax implications and optimization
+3. Investment deployment strategy with specific ₹ amounts
+4. Risk considerations
+5. Month-by-month action plan for next 6 months
+
+Be specific with numbers. Use Hinglish naturally. Under 350 words.`;
+
+  try {
+    const reply = await callClaude(prompt, BASE_SYSTEM, 700);
+    resultDiv.innerHTML = fmt(reply);
+  } catch(e) {
+    resultDiv.textContent = '⚠ Could not load analysis. Please check connection.';
+  }
+}
+
+// ═══════════════════════════════════════
+// TAX WIZARD
+// ═══════════════════════════════════════
+function simulateUpload() {
+  const icon = document.getElementById('uzIcon');
+  const title = document.getElementById('uzTitle');
+  icon.textContent = '⏳';
+  title.textContent = 'Processing Form 16…';
+  setTimeout(() => {
+    icon.textContent = '✅';
+    title.textContent = 'Form 16 Extracted! Values auto-filled below.';
+  }, 1800);
+}
+
+async function analyzeTax() {
+  const gross = +document.getElementById('t-gross').value;
+  const basic = +document.getElementById('t-basic').value;
+  const hra = +document.getElementById('t-hra').value;
+  const rent = +document.getElementById('t-rent').value;
+  const elss = +document.getElementById('t-elss').value;
+  const epf = +document.getElementById('t-epf').value;
+
+  // HRA exemption
+  const hraExempt = Math.min(hra, rent - basic * 0.1, basic * 0.5);
+  const eighty_c_used = elss + epf;
+  const eighty_c_remaining = Math.max(0, 150000 - eighty_c_used);
+
+  // Old regime calc
+  const stdDed = 50000;
+  const oldTaxable = Math.max(0, gross - stdDed - hraExempt - Math.min(eighty_c_used, 150000));
+  const oldTax = calcTaxOld(oldTaxable);
+
+  // New regime calc
+  const newTaxable = Math.max(0, gross - 75000);
+  const newTax = calcTaxNew(newTaxable);
+
+  const winner = oldTax < newTax ? 'old' : 'new';
+  const saving = Math.abs(oldTax - newTax);
+
+  document.getElementById('regimeCompare').style.display = 'grid';
+  document.getElementById('regimeCompare').innerHTML = `
+    <div class="regime-box ${winner==='old'?'winner':''}">
+      <div class="regime-label">Old Regime</div>
+      <div class="regime-tax" style="color:${winner==='old'?'var(--green)':'var(--rose)'}">₹${oldTax.toLocaleString()}</div>
+      <div class="regime-save">Annual tax</div>
+      ${winner==='old'?'<div class="regime-badge rb-g">✅ RECOMMENDED</div>':''}
+    </div>
+    <div class="regime-box ${winner==='new'?'winner':''}">
+      <div class="regime-label">New Regime</div>
+      <div class="regime-tax" style="color:${winner==='new'?'var(--green)':'var(--rose)'}">₹${newTax.toLocaleString()}</div>
+      <div class="regime-save">Annual tax</div>
+      ${winner==='new'?'<div class="regime-badge rb-g">✅ RECOMMENDED</div>':''}
+    </div>
+  `;
+
+  const deductions = [
+    { icon:'🏠', name:'HRA Exemption', status:'Claimed', amount: hraExempt, claimed: true },
+    { icon:'💼', name:'Standard Deduction', status:'Auto-applied', amount: 50000, claimed: true },
+    { icon:'📊', name:'ELSS/PPF 80C', status: eighty_c_remaining > 0 ? `₹${eighty_c_remaining.toLocaleString()} UNUSED` : 'Maxed', amount: Math.min(eighty_c_used, 150000), claimed: eighty_c_remaining === 0 },
+    { icon:'🏦', name:'NPS 80CCD(1B)', status:'Not Claimed', amount: 50000, claimed: false },
+    { icon:'🏥', name:'Health Ins 80D', status:'Check with employer', amount: 25000, claimed: false },
+    { icon:'📚', name:'Education Loan 80E', status:'If applicable', amount: 0, claimed: null },
+  ];
+
+  document.getElementById('deductionList').innerHTML = deductions.map(d => `
+    <div class="deduction-item">
+      <div class="di-left">
+        <span class="di-icon">${d.icon}</span>
+        <div><div class="di-name">${d.name}</div><div class="di-status">${d.status}</div></div>
+      </div>
+      <div class="di-right">
+        <div class="di-amount" style="color:${d.claimed===true?'var(--green)':d.claimed===false?'var(--rose)':'var(--muted)'}">₹${d.amount.toLocaleString()}</div>
+        ${d.claimed===false?'<div class="di-missed">⚠ Missing!</div>':d.claimed===true?'<div class="di-claimed">✓ Applied</div>':''}
+      </div>
+    </div>
+  `).join('');
+
+  document.getElementById('taxAIWrap').style.display = 'block';
+  document.getElementById('taxAIText').innerHTML = '<span class="spinner"></span> Generating your tax strategy…';
+
+  const prompt = `User tax details: Gross salary ₹${gross}, HRA ₹${hra}, Rent paid ₹${rent}, 80C used ₹${eighty_c_used} (₹${eighty_c_remaining} remaining), EPF ₹${epf}.
+Old regime tax: ₹${oldTax.toLocaleString()}. New regime tax: ₹${newTax.toLocaleString()}. Recommended: ${winner} regime (saves ₹${saving.toLocaleString()}).
+
+Give a 200-word tax optimization strategy covering:
+1. Why they should choose the ${winner} regime with exact savings number
+2. Top 3 deductions they're missing and how to claim
+3. Last-minute investments to make before March 31
+4. One tax planning tip most people miss
+
+Be specific with ₹ amounts. Hinglish welcome.`;
+
+  try {
+    const reply = await callClaude(prompt, BASE_SYSTEM, 500);
+    document.getElementById('taxAIText').innerHTML = fmt(reply);
+  } catch(e) {
+    document.getElementById('taxAIText').textContent = '⚠ Network error.';
+  }
+}
+
+function calcTaxOld(income) {
+  let tax = 0;
+  if (income <= 250000) return 0;
+  if (income <= 500000) tax = (income - 250000) * 0.05;
+  else if (income <= 1000000) tax = 12500 + (income - 500000) * 0.20;
+  else tax = 112500 + (income - 1000000) * 0.30;
+  return Math.round(tax * 1.04); // +4% cess
+}
+
+function calcTaxNew(income) {
+  let tax = 0;
+  const slabs = [[300000,0],[600000,.05],[900000,.10],[1200000,.15],[1500000,.20],[Infinity,.30]];
+  let prev = 0;
+  for (const [limit, rate] of slabs) {
+    if (income <= prev) break;
+    tax += Math.min(income - prev, limit - prev) * rate;
+    prev = limit;
+  }
+  return Math.round(tax * 1.04);
+}
+
+// ═══════════════════════════════════════
+// COUPLE PLANNER
+// ═══════════════════════════════════════
+async function analyzeCouple() {
+  const p1 = {
+    name: document.getElementById('c-p1-name').value,
+    income: +document.getElementById('c-p1-income').value,
+    expenses: +document.getElementById('c-p1-exp').value,
+    savings: +document.getElementById('c-p1-savings').value,
+    risk: document.getElementById('c-p1-risk').value,
+  };
+  const p2 = {
+    name: document.getElementById('c-p2-name').value,
+    income: +document.getElementById('c-p2-income').value,
+    expenses: +document.getElementById('c-p2-exp').value,
+    savings: +document.getElementById('c-p2-savings').value,
+    risk: document.getElementById('c-p2-risk').value,
+  };
+
+  const combinedIncome = p1.income + p2.income;
+  const combinedExpenses = p1.expenses + p2.expenses;
+  const combinedSavings = p1.savings + p2.savings;
+  const combinedSaveable = combinedIncome - combinedExpenses;
+
+  document.getElementById('coupleResults').style.display = 'block';
+  document.getElementById('combinedNW').textContent = `₹${(combinedSavings/100000).toFixed(1)}L`;
+
+  const sipSplit = Math.round(combinedSaveable * 0.6);
+  const p1Sip = Math.round(sipSplit * (p1.income / combinedIncome));
+  const p2Sip = sipSplit - p1Sip;
+
+  document.getElementById('splitRecommend').innerHTML = `
+    <div class="split-item"><div class="si-label">Monthly SIP</div><div class="si-p1">₹${p1Sip.toLocaleString()}</div><div class="si-sep">${p1.name}</div><div class="si-p2">₹${p2Sip.toLocaleString()}</div><div class="si-sep">${p2.name}</div></div>
+    <div class="split-item"><div class="si-label">NPS Invest</div><div class="si-p1">₹4,167</div><div class="si-sep">Both partners</div><div class="si-p2">₹4,167</div><div class="si-sep">80CCD(1B)</div></div>
+    <div class="split-item"><div class="si-label">HRA Claim</div><div class="si-p1" style="color:var(--gold)">Higher earner</div><div class="si-sep">claims rent</div><div class="si-p2" style="color:var(--muted)">N/A</div><div class="si-sep">saves more</div></div>
+    <div class="split-item"><div class="si-label">Emergency Fund</div><div class="si-p1">6 months</div><div class="si-sep">combined expenses</div><div class="si-p2">₹${(combinedExpenses*6/100000).toFixed(1)}L</div><div class="si-sep">target</div></div>
+  `;
+
+  document.getElementById('coupleAIText').innerHTML = '<span class="spinner"></span> Optimizing joint strategy…';
+
+  const prompt = `Married couple financial planning.
+${p1.name}: Income ₹${p1.income}/mo, Expenses ₹${p1.expenses}/mo, Savings ₹${p1.savings}, Risk: ${p1.risk}
+${p2.name}: Income ₹${p2.income}/mo, Expenses ₹${p2.expenses}/mo, Savings ₹${p2.savings}, Risk: ${p2.risk}
+Combined saveable: ₹${combinedSaveable.toLocaleString()}/mo
+
+Give a 280-word joint financial strategy covering:
+1. How to split SIP investments optimally between both (for tax efficiency)
+2. HRA optimization — who should claim rent receipt
+3. NPS strategy — should both contribute for double 80CCD benefit
+4. Insurance — joint vs individual health policy analysis
+5. Combined FIRE target and timeline
+
+Be specific with ₹ amounts and tax savings. Make it actionable.`;
+
+  try {
+    const reply = await callClaude(prompt, BASE_SYSTEM, 600);
+    document.getElementById('coupleAIText').innerHTML = fmt(reply);
+  } catch(e) {
+    document.getElementById('coupleAIText').textContent = '⚠ Error generating analysis.';
+  }
+}
+
+// ═══════════════════════════════════════
+// MF X-RAY
+// ═══════════════════════════════════════
+function switchMfTab(tab, el) {
+  document.querySelectorAll('#mfTabs .tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  ['upload','portfolio','overlap','rebalance'].forEach(t => {
+    const el = document.getElementById('mfTab-' + t);
+    if (el) el.style.display = t === tab ? 'block' : 'none';
+  });
+}
+
+function simulateMFUpload() {
+  const icon = document.getElementById('mfUpIcon');
+  const title = document.getElementById('mfUpTitle');
+  icon.textContent = '⏳';
+  title.textContent = 'Processing CAMS statement…';
+  setTimeout(() => {
+    icon.textContent = '✅';
+    title.textContent = 'Statement processed! Loading X-Ray…';
+    setTimeout(() => loadSamplePortfolio(), 800);
+  }, 2000);
+}
+
+async function loadSamplePortfolio() {
+  const holdings = [
+    { fund: 'Mirae Asset Large Cap Fund — Direct Growth', category: 'Large Cap', nav: 112.4, units: 450, value: 506000, xirr: 15.2, er: 0.52, bench: 12.1 },
+    { fund: 'Parag Parikh Flexi Cap Fund — Direct Growth', category: 'Flexi Cap', nav: 89.7, units: 380, value: 341000, xirr: 18.4, er: 0.63, bench: 14.2 },
+    { fund: 'SBI Small Cap Fund — Direct Growth', category: 'Small Cap', nav: 176.2, units: 120, value: 212000, xirr: 22.1, er: 0.72, bench: 18.5 },
+    { fund: 'HDFC Balanced Advantage Fund — Direct', category: 'Hybrid', nav: 64.3, units: 280, value: 181000, xirr: 11.8, er: 0.78, bench: 10.2 },
+  ];
+
+  const totalValue = holdings.reduce((a,h) => a + h.value, 0);
+  const weightedXIRR = holdings.reduce((a,h) => a + h.xirr * h.value / totalValue, 0);
+  const weightedER = holdings.reduce((a,h) => a + h.er * h.value / totalValue, 0);
+
+  // Show portfolio tab
+  document.querySelectorAll('#mfTabs .tab').forEach((t,i) => { if (i===1) t.classList.add('active'); else t.classList.remove('active'); });
+  ['upload','portfolio','overlap','rebalance'].forEach(t => {
+    const el = document.getElementById('mfTab-' + t);
+    if (el) el.style.display = t === 'portfolio' ? 'block' : 'none';
+  });
+
+  document.getElementById('xrayMetrics').innerHTML = `
+    <div class="xray-card"><div class="xc-label">Portfolio Value</div><div class="xc-val rc-g">₹${(totalValue/100000).toFixed(1)}L</div><div class="xc-sub">4 funds · Direct plans</div></div>
+    <div class="xray-card"><div class="xc-label">True XIRR</div><div class="xc-val rc-g">${weightedXIRR.toFixed(1)}%</div><div class="xc-sub">Beats Nifty by 4.3%</div></div>
+    <div class="xray-card"><div class="xc-label">Expense Ratio Drag</div><div class="xc-val rc-a">${weightedER.toFixed(2)}%</div><div class="xc-sub">₹${Math.round(totalValue*weightedER/100).toLocaleString()}/yr lost</div></div>
+    <div class="xray-card"><div class="xc-label">Overlap Risk</div><div class="xc-val rc-a">38%</div><div class="xc-sub">Funds 1 & 2 share stocks</div></div>
+  `;
+
+  document.getElementById('holdingsTable').innerHTML = `
+    <thead><tr><th>Fund Name</th><th>Category</th><th>Value</th><th>XIRR</th><th>Exp. Ratio</th><th>vs Bench</th></tr></thead>
+    <tbody>
+      ${holdings.map(h => `
+        <tr>
+          <td style="max-width:220px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${h.fund}</td>
+          <td>${h.category}</td>
+          <td>₹${(h.value/100000).toFixed(2)}L</td>
+          <td style="color:${h.xirr>14?'var(--green)':'var(--gold)'}">${h.xirr}%</td>
+          <td style="color:${h.er<0.6?'var(--green)':'var(--gold)'}">${h.er}%</td>
+          <td style="color:var(--green)">+${(h.xirr - h.bench).toFixed(1)}%</td>
+        </tr>
+      `).join('')}
+    </tbody>
+  `;
+
+  // Overlap
+  const overlapData = [
+    {funds:'Mirae × PPFCF', pct:38, color:'var(--rose)'},
+    {funds:'Mirae × SBI SC', pct:12, color:'var(--gold)'},
+    {funds:'PPFCF × HDFC', pct:22, color:'var(--gold)'},
+    {funds:'PPFCF × SBI SC', pct:8, color:'var(--green)'},
+  ];
+  document.getElementById('overlapMatrix').innerHTML = overlapData.map(o => `
+    <div class="om-cell">
+      <div class="om-pct" style="color:${o.color}">${o.pct}%</div>
+      <div class="om-lbl">${o.funds}</div>
+    </div>
+  `).join('');
+  document.getElementById('overlapStocks').innerHTML = `
+    <div style="display:flex;flex-wrap:wrap;gap:6px">
+      ${['HDFC Bank','ICICI Bank','Infosys','TCS','Reliance','Bharti Airtel'].map(s =>
+        `<span style="padding:4px 10px;border-radius:8px;background:var(--rose-dim);border:1px solid rgba(251,113,133,0.2);font-size:11px;color:var(--rose)">${s}</span>`
+      ).join('')}
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:10px">These stocks appear in 2+ of your funds. High overlap reduces true diversification.</p>
+  `;
+
+  // Rebalance
+  const rebalActions = [
+    { fund: 'SBI Small Cap Fund', action: 'Hold', reason: 'Excellent XIRR 22.1%. High risk — maintain 17% allocation max.', ra: 'ra-hold' },
+    { fund: 'Mirae Asset Large Cap', action: 'Reduce', reason: '38% overlap with PPFCF. Reduce allocation from 41% → 25%.', ra: 'ra-sell' },
+    { fund: 'Parag Parikh Flexi Cap', action: 'Increase', reason: 'Best risk-adjusted returns + international exposure. Increase to 35%.', ra: 'ra-buy' },
+    { fund: 'HDFC Balanced Advantage', action: 'Sell', reason: 'High ER 0.78% + lowest XIRR. Replace with a debt fund or NPS.', ra: 'ra-sell' },
+    { fund: 'Add: Navi Nifty 50 Index', action: 'Buy', reason: 'Zero expense ratio. Add for large-cap core (20% allocation).', ra: 'ra-buy' },
+  ];
+  document.getElementById('rebalanceList').innerHTML = rebalActions.map(r => `
+    <div class="rebal-item">
+      <div class="ri-fund">${r.fund}</div>
+      <div class="ri-action ${r.ra}">${r.action}</div>
+      <div class="ri-reason">${r.reason}</div>
+    </div>
+  `).join('');
+
+  document.getElementById('mfAIText').innerHTML = '<span class="spinner"></span> Generating AI portfolio assessment…';
+
+  const prompt = `MF portfolio analysis: 4 funds, total ₹${(totalValue/100000).toFixed(1)}L.
+Funds: Mirae Large Cap (XIRR 15.2%), PPFCF Flexi Cap (18.4%), SBI Small Cap (22.1%), HDFC Balanced Advantage (11.8%).
+Key issues: 38% overlap between Mirae & PPFCF, weighted ER ${weightedER.toFixed(2)}%, portfolio XIRR ${weightedXIRR.toFixed(1)}%.
+
+Give a 200-word AI portfolio assessment:
+1. Portfolio health verdict (excellent/good/needs work)
+2. Single biggest portfolio problem
+3. The fund they should exit first and why
+4. Ideal 3-fund portfolio to replace this one (with category names, not specific funds)
+5. Expected improvement in XIRR after rebalancing
+
+Be direct and specific. Hinglish welcome.`;
+
+  try {
+    const reply = await callClaude(prompt, BASE_SYSTEM, 500);
+    document.getElementById('mfAIText').innerHTML = fmt(reply);
+  } catch(e) {
+    document.getElementById('mfAIText').textContent = '⚠ Could not load AI analysis.';
+  }
+}
+</script>
+</body>
+</html>
