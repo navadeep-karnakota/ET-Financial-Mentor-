@@ -51,71 +51,12 @@ A smart, India-focused financial planning web app that helps users achieve **Fin
 
 ---
 
-## 📂 Project Structure
 
-```
-FIRE-Path-Planner/
-│
-├── frontend/
-│   ├── index.html
-│   ├── styles.css
-│   └── script.js
-│
-├── backend/
-│   ├── app.py
-│   └── requirements.txt
-│
-└── README.md
-```
 
----
 
-## ⚙️ Installation & Setup
 
-### 1. Clone the Repository
 
-```bash
-git clone https://github.com/your-username/fire-path-planner.git
-cd fire-path-planner
-```
 
-### 2. Backend Setup
-
-```bash
-cd backend
-pip install -r requirements.txt
-python app.py
-```
-
-### 3. Open Frontend
-
-* Open `index.html` in browser
-  **OR**
-* Use Live Server extension (recommended)
-
----
-
-## 🔌 API Endpoint
-
-### POST `/generate`
-
-**Request:**
-
-```json
-{
-  "prompt": "Calculate FIRE plan"
-}
-```
-
-**Response:**
-
-```json
-{
-  "response": "Detailed financial plan..."
-}
-```
-
----
 
 ## 📊 Input Parameters
 
@@ -171,29 +112,6 @@ python app.py
 
 This tool provides **educational financial estimates only**.
 It is **not financial advice**. Please consult a certified financial advisor before investing.
+<img width="931" height="888" alt="Screenshot 2026-03-29 115128" src="https://github.com/user-attachments/assets/70d29fd8-8231-4f1f-af24-49376a6bbeb0" />
 
----
 
-## 👨‍💻 Author
-
-Developed by **Navadeep**
-
----
-
-## ⭐ Support
-
-If you like this project:
-
-* ⭐ Star the repo
-* 🍴 Fork it
-* 🛠️ Contribute
-
----
-
-## 📬 Contact
-
-For suggestions or collaboration:
-
-* Email: [your-email@example.com](mailto:your-email@example.com)
-
----
