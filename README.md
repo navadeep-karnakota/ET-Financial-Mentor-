@@ -112,6 +112,6 @@ A smart, India-focused financial planning web app that helps users achieve **Fin
 
 This tool provides **educational financial estimates only**.
 It is **not financial advice**. Please consult a certified financial advisor before investing.
-<img width="931" height="888" alt="Screenshot 2026-03-29 115128" src="https://github.com/user-attachments/assets/70d29fd8-8231-4f1f-af24-49376a6bbeb0" />
+<video width="931" height="888" alt="Screenshot 2026-03-29 115128" src="https://github.com/user-attachments/assets/70d29fd8-8231-4f1f-af24-49376a6bbeb0" />
 
 
