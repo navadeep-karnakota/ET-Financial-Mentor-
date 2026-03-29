@@ -112,6 +112,8 @@ A smart, India-focused financial planning web app that helps users achieve **Fin
 
 This tool provides **educational financial estimates only**.
 It is **not financial advice**. Please consult a certified financial advisor before investing.
-<video width="1200" autoplay="" muted="" src="./ET Gen AI"></video>
+
+
+<img width="1000" height="899" alt="Screenshot 2026-03-29 123254" src="https://github.com/user-attachments/assets/edc60a47-b6b8-4daa-8211-56a533a5a379" />
 
 
